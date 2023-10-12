@@ -79,13 +79,12 @@ def make_password(master1, master2, seed, plen=20, char="ans", rm_cha="", start=
     Args:
         master1 (str): マスターパスワード1
         master2 (str): マスターパスワード2
-        seed (str, optional): サービスごとのパスワード. Defaults to "1234".
+        seed (str, optional): サービスごとのパスワード.
         plen (int, optional): パスワードの長さ． Defaults to 20.
         char (str, optional): a[アルファベット], n[数字], s[記号]の組み合わせ. Defaults to "ans".
         rm_cha (str, optional): NG記号. Defaults to "".
         start (int, optional): パスワードの開始位置. Defaults to 1.
-        upper (bool, optional): 大文字縛りがあるか. Defaults to False.
-        lower (bool, optional): 小文字縛りがあるか. Defaults to False.
+        upper_lower (str, optional): 大文字小文字縛りがあるか. Defaults to "both".
     """
 
     # 指定されたハッシュ関数を適用する。
