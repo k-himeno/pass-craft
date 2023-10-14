@@ -360,6 +360,8 @@ def get_csv_path(private_path):
 
 
 if __name__ == "__main__":
+    # ファイルがあるパスに移動
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     private_path = os.path.join("..", "private", "saved_path.txt")
     path = get_csv_path(private_path)
 
