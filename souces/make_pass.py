@@ -190,141 +190,141 @@ def check_and_regenerate_password(master1, master2, password_data, site_info_dic
     return site_info_dict
 
 
-# GUIによる入力
-class GetInputMasterGUI(tk.Tk):
-    def __init__(self):
-        super().__init__()
-        self.title("Password Generator")
+if GUI_AVAILABLE:
+    # GUIによる入力
+    class GetInputMasterGUI(tk.Tk):
+        def __init__(self):
+            super().__init__()
+            self.title("Password Generator")
 
-        # Widgets initialization
-        Label(self, text="Master1").grid(row=0, column=0)
-        self.master1_entry = Entry(self, show="*")
-        self.master1_entry.grid(row=0, column=1)
+            # Widgets initialization
+            Label(self, text="Master1").grid(row=0, column=0)
+            self.master1_entry = Entry(self, show="*")
+            self.master1_entry.grid(row=0, column=1)
 
-        Label(self, text="Master2").grid(row=1, column=0)
-        self.master2_entry = Entry(self, show="*")
-        self.master2_entry.grid(row=1, column=1)
+            Label(self, text="Master2").grid(row=1, column=0)
+            self.master2_entry = Entry(self, show="*")
+            self.master2_entry.grid(row=1, column=1)
 
-        # Button
-        submit_button = Button(self, text="Generate Password", command=self.submit)
-        submit_button.grid(row=2, column=0, columnspan=2)
+            # Button
+            submit_button = Button(self, text="Generate Password", command=self.submit)
+            submit_button.grid(row=2, column=0, columnspan=2)
 
-        # Result
-        self.result_var = StringVar()
-        Label(self, text="Generated Password:").grid(row=3, column=0)
-        Label(self, textvariable=self.result_var).grid(row=3, column=1)
+            # Result
+            self.result_var = StringVar()
+            Label(self, text="Generated Password:").grid(row=3, column=0)
+            Label(self, textvariable=self.result_var).grid(row=3, column=1)
 
-        # Finish Button
-        finish_button = Button(self, text="Finish", command=self.finish)
-        finish_button.grid(row=4, column=0, columnspan=2)
+            # Finish Button
+            finish_button = Button(self, text="Finish", command=self.finish)
+            finish_button.grid(row=4, column=0, columnspan=2)
 
-    def submit(self):  # 入力の受付と計算
-        self.master1 = self.master1_entry.get()
-        self.master2 = self.master2_entry.get()
+        def submit(self):  # 入力の受付と計算
+            self.master1 = self.master1_entry.get()
+            self.master2 = self.master2_entry.get()
 
-        # make_password function call and display result
-        password_data = make_password(
-            self.master1, self.master2, seed="1234"
-        )  # Assuming make_password function is defined elsewhere
-        self.result_var.set(password_data["password"])
+            # make_password function call and display result
+            password_data = make_password(
+                self.master1, self.master2, seed="1234"
+            )  # Assuming make_password function is defined elsewhere
+            self.result_var.set(password_data["password"])
 
-    def finish(self):
-        self.destroy()  # Close the application
+        def finish(self):
+            self.destroy()  # Close the application
 
+    class PasswordGeneratorGUI(tk.Tk):
+        def __init__(self, master1, master2):
+            super().__init__()
+            self.master1 = master1
+            self.master2 = master2
+            self.title("Password Generator")
 
-class PasswordGeneratorGUI(tk.Tk):
-    def __init__(self, master1, master2):
-        super().__init__()
-        self.master1 = master1
-        self.master2 = master2
-        self.title("Password Generator")
+            # Layout and widgets
+            self.create_widgets()
 
-        # Layout and widgets
-        self.create_widgets()
+        def create_widgets(self):
+            # Entries for site_info
+            Label(self, text="Site Name").grid(row=0, column=0)
+            self.site_name_entry = Entry(self)
+            self.site_name_entry.grid(row=0, column=1)
 
-    def create_widgets(self):
-        # Entries for site_info
-        Label(self, text="Site Name").grid(row=0, column=0)
-        self.site_name_entry = Entry(self)
-        self.site_name_entry.grid(row=0, column=1)
+            Label(self, text="ID").grid(row=1, column=0)
+            self.id_entry = Entry(self)
+            self.id_entry.grid(row=1, column=1)
 
-        Label(self, text="ID").grid(row=1, column=0)
-        self.id_entry = Entry(self)
-        self.id_entry.grid(row=1, column=1)
+            Label(self, text="Seed").grid(row=2, column=0)
+            self.seed_entry = Entry(self)
+            self.seed_entry.grid(row=2, column=1)
 
-        Label(self, text="Seed").grid(row=2, column=0)
-        self.seed_entry = Entry(self)
-        self.seed_entry.grid(row=2, column=1)
+            Label(self, text="Password Length").grid(row=3, column=0)
+            self.plen_entry = Entry(self)
+            self.plen_entry.insert(0, "20")
+            self.plen_entry.grid(row=3, column=1)
 
-        Label(self, text="Password Length").grid(row=3, column=0)
-        self.plen_entry = Entry(self)
-        self.plen_entry.insert(0, "20")
-        self.plen_entry.grid(row=3, column=1)
+            Label(self, text="Start").grid(row=4, column=0)
+            self.start_entry = Entry(self)
+            self.start_entry.insert(0, "1")
+            self.start_entry.grid(row=4, column=1)
 
-        Label(self, text="Start").grid(row=4, column=0)
-        self.start_entry = Entry(self)
-        self.start_entry.insert(0, "1")
-        self.start_entry.grid(row=4, column=1)
+            Label(self, text="Char").grid(row=5, column=0)
+            self.char_var = StringVar(self)
+            self.char_var.set("ans")
+            self.char_options = OptionMenu(self, self.char_var, "ans", "an", "a", "n")
+            self.char_options.grid(row=5, column=1)
 
-        Label(self, text="Char").grid(row=5, column=0)
-        self.char_var = StringVar(self)
-        self.char_var.set("ans")
-        self.char_options = OptionMenu(self, self.char_var, "ans", "an", "a", "n")
-        self.char_options.grid(row=5, column=1)
+            Label(self, text="Upper/Lower").grid(row=6, column=0)
+            self.upper_lower_var = StringVar(self)
+            self.upper_lower_var.set("both")
+            self.upper_lower_options = OptionMenu(self, self.upper_lower_var, "both", "upper", "lower")
+            self.upper_lower_options.grid(row=6, column=1)
 
-        Label(self, text="Upper/Lower").grid(row=6, column=0)
-        self.upper_lower_var = StringVar(self)
-        self.upper_lower_var.set("both")
-        self.upper_lower_options = OptionMenu(self, self.upper_lower_var, "both", "upper", "lower")
-        self.upper_lower_options.grid(row=6, column=1)
+            Label(self, text="Remove Characters").grid(row=7, column=0)
+            self.rm_cha_entry = Entry(self)
+            self.rm_cha_entry.grid(row=7, column=1)
 
-        Label(self, text="Remove Characters").grid(row=7, column=0)
-        self.rm_cha_entry = Entry(self)
-        self.rm_cha_entry.grid(row=7, column=1)
+            # Generate password button
+            self.generate_btn = Button(self, text="Generate Password", command=self.generate_password)
+            self.generate_btn.grid(row=8, column=0, columnspan=2)
 
-        # Generate password button
-        self.generate_btn = Button(self, text="Generate Password", command=self.generate_password)
-        self.generate_btn.grid(row=8, column=0, columnspan=2)
+            # Labels to display generated password and all characters
+            self.password_var = StringVar()
+            self.all_chr_var = StringVar()
 
-        # Labels to display generated password and all characters
-        self.password_var = StringVar()
-        self.all_chr_var = StringVar()
+            Label(self, text="Password:").grid(row=9, column=0)
+            password_entry = Entry(self, textvariable=self.password_var, state="readonly")
+            password_entry.grid(row=9, column=1)
+            Label(self, text="All Characters:").grid(row=10, column=0)
+            Label(self, textvariable=self.all_chr_var).grid(row=10, column=1)
 
-        Label(self, text="Password:").grid(row=9, column=0)
-        password_entry = Entry(self, textvariable=self.password_var, state="readonly")
-        password_entry.grid(row=9, column=1)
-        Label(self, text="All Characters:").grid(row=10, column=0)
-        Label(self, textvariable=self.all_chr_var).grid(row=10, column=1)
+            # Finish button
+            self.finish_btn = Button(self, text="Finish", command=self.finish)
+            self.finish_btn.grid(row=11, column=0, columnspan=2)
 
-        # Finish button
-        self.finish_btn = Button(self, text="Finish", command=self.finish)
-        self.finish_btn.grid(row=11, column=0, columnspan=2)
+        def generate_password(self):
+            self.site_info = {
+                "site_name": self.site_name_entry.get(),
+                "id": self.id_entry.get(),
+                "seed": self.seed_entry.get(),
+                "plen": int(self.plen_entry.get()),
+                "start": int(self.start_entry.get()),
+                "char": self.char_var.get(),
+                "upper_lower": self.upper_lower_var.get(),
+                "rm_cha": self.rm_cha_entry.get(),
+                "update_date": time.strftime("%Y/%m/%d", time.localtime()),
+            }
+            password_data = make_password(self.master1, self.master2, **self.site_info)
+            self.password_var.set(password_data["password"])
+            self.all_chr_var.set(password_data["all_chr"])
 
-    def generate_password(self):
-        self.site_info = {
-            "site_name": self.site_name_entry.get(),
-            "id": self.id_entry.get(),
-            "seed": self.seed_entry.get(),
-            "plen": int(self.plen_entry.get()),
-            "start": int(self.start_entry.get()),
-            "char": self.char_var.get(),
-            "upper_lower": self.upper_lower_var.get(),
-            "rm_cha": self.rm_cha_entry.get(),
-            "update_date": time.strftime("%Y/%m/%d", time.localtime()),
-        }
-        password_data = make_password(self.master1, self.master2, **self.site_info)
-        self.password_var.set(password_data["password"])
-        self.all_chr_var.set(password_data["all_chr"])
+        def finish(self):
+            # Extracting all the info
 
-    def finish(self):
-        # Extracting all the info
+            # ここで `site_info` を保存や出力したい処理を追加できます。
+            # 例: ファイルへの保存、データベースへの保存など
 
-        # ここで `site_info` を保存や出力したい処理を追加できます。
-        # 例: ファイルへの保存、データベースへの保存など
+            # GUIを閉じる
 
-        # GUIを閉じる
-
-        self.destroy()
+            self.destroy()
 
 
 def get_csv_path(private_path):
@@ -371,7 +371,8 @@ if __name__ == "__main__":
         # これでmaster1, master2が取得できる
         app = PasswordGeneratorGUI(masterGUI.master1, masterGUI.master2)
         app.mainloop()
-        append_dict_to_csv(path, app.site_info)
+
+        site_info_dict = app.site_info
 
     else:
         # マスターパスワードを入力．
@@ -386,3 +387,6 @@ if __name__ == "__main__":
 
         # パスワードに満足したかの質問
         site_info_dict = check_and_regenerate_password(master1, master2, password_data, site_info_dict)
+
+    # 入力内容の保存
+    append_dict_to_csv(path, site_info_dict)
